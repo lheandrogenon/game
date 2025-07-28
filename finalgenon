@@ -1,0 +1,98 @@
+  <!DOCTYPE html>
+<html>
+<head>
+  <title>Lheandro Y. Genon</title>
+  <style>
+    body { font-family: Arial; padding: 20px; text-align: center; }
+    .option { margin: 5px 0; display: flex; justify-content: center; }
+    .correct { color: green; }
+    .wrong { color: red; }
+  </style>
+</head>
+<body>
+
+  <h1>Interactive Quiz Game</h1>
+  <p id="question"></p>
+  <div id="options"></div>
+  <p id="answers"></p>
+  <p id="scoreDisplay">Score: 0</p>
+
+  <script>
+    const questions = [
+      {
+        question: "Which of these is a primary color?",
+        options: ["Purple", "Blue", "White", "Pink"],
+        answer: "Blue"
+      },
+      {
+        question: "The fastest animal in the world",
+        options: ["Peregrine Falcon", "Cheetah", "Tiger", "Panther"],
+        answer: "Peregrine Falcon"
+      }, 
+      {
+        question: "How many planets in the solar system?",
+        options: ["8", "7", "10", "6"],
+        answer: "8"
+      }
+    ];
+
+    let orderquestion = 0;
+    let score = 0;
+
+    function displayquestion() {
+      const display = questions[orderquestion];
+      document.getElementById("question").textContent = display.question;
+      const orderoptions = document.getElementById("options");
+      orderoptions.innerHTML = "";
+
+      for (let i = 0; i < display.options.length; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = display.options[i];
+        btn.className = "option";
+        btn.onclick = function () {
+          checkAnswer(display.options[i]);
+        };
+        orderoptions.appendChild(btn);
+      }
+
+      document.getElementById("answers").textContent = "";
+    }
+
+    function checkAnswer(selected) {
+      const correct = questions[orderquestion].answer;
+      const answers = document.getElementById("answers");
+
+      if (selected === correct) {
+        score++;
+        answers.textContent = "Correct!";
+        answers.className = "correct";
+      } else {
+        answers.textContent = `Wrong! The correct answer is ${correct}.`;
+        answers.className = "wrong";
+      }
+
+      document.getElementById("scoreDisplay").textContent = "Score: " + score;
+
+      setTimeout(() => {
+        orderquestion++;
+        if (orderquestion < questions.length) {
+          displayquestion();
+        } else {
+          totalscore();
+        }
+      }, 7);
+    }
+
+    function totalscore() {
+      document.getElementById("question").textContent = "Quiz Completed!";
+      document.getElementById("options").innerHTML = "";
+      const message = score === questions.length ? "Great job!" : "You can do better!";
+      document.getElementById("answers").textContent = `Final Score: ${score}/${questions.length}. ${message}`;
+      document.getElementById("answers").className = "";
+    }
+
+    displayquestion();
+  </script>
+
+</body>
+</html>
